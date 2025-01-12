@@ -106,8 +106,10 @@ void copyAllFiles(char files[][255], int fileCount, const char *title, int seque
     for (int i = 0; i < fileCount; i++)
     {
         const char *extension = getFileExtension(files[i]);
-        snprintf(destination, sizeof(destination), "output%c%s%c%s Episode %d%s%s",
+
+        snprintf(destination, sizeof(destination), "output%c%s%c%s%s %d%s%s",
                  DIRECTORY_SEPARATOR, title, DIRECTORY_SEPARATOR, title,
+                 isEpisode ? " Episode" : "",
                  sequenceEpisode + i,
                  (i == fileCount - 1 && isAddEnding) ? " End" : "",
                  extension);
