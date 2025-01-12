@@ -102,7 +102,8 @@ make clean
 ```
 
 ## Example  🎞️
-![img](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnkxNjJmcXl6NHQ3eDY2YWRiaDFoZzA1c2hhZGUxMmVxeXgyd3p0NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ertODta6JFjOnP7QHj/giphy.webp)
+![img](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWVpcm94MXV0aHg3NmFuM3FmZzcwY2JweTd5bTZuNWN3OHFicTZibSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ertODta6JFjOnP7QHj/giphy-downsized-large.gif)
+
 
 ## 📬 Support
 
