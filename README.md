@@ -104,6 +104,25 @@ make clean
 ## Example  🎞️
 ![img](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWVpcm94MXV0aHg3NmFuM3FmZzcwY2JweTd5bTZuNWN3OHFicTZibSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ertODta6JFjOnP7QHj/giphy-downsized-large.gif)
 
+## Adding CLI 💻
+To run Copas Multiple from the command line, follow these steps:
+
+- Move the compiled files on /dist to the global directory:
+
+  for linux/macOs:
+  ```bash
+  sudo mv copasMultiple /usr/local/bin/copasMultiple
+  ```
+  for windows:
+
+  Add the environment path in Windows to the executable folder. My suggestion is to create a copasMtiple folder then put all the builds into that folder, and move the folder to C:\\Tools
+
+- running App on terminal
+
+  Now you can run the app anywhere without having to copy the app into the folder containing the files you want to copy and rename, by using the command:
+  ```bash
+  copasMutiple
+  ```
 
 ## 📬 Support
 

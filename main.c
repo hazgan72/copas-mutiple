@@ -12,7 +12,6 @@ void getFiles(char files[MAX_FILES][255], int *fileCount);
 
 int main()
 {
-
     char title[255], files[MAX_FILES][255];
     int fileCount = 0, sequenceEpisode = 1, isEpisode = 0, isAddEnding = 0;
 
@@ -24,16 +23,18 @@ int main()
         printf("Input Title: ");
         if (fgets(title, sizeof(title), stdin))
         {
-            title[strcspn(title, "\n")] = 0;
-
+            title[strcspn(title, "\n")] = '\0';
+            if (strlen(title) >= 255)
+            {
+                printf("Title is too long. Maximum 255 characters.\n");
+                continue;
+            }
             if (strlen(title) == 0)
             {
                 printf("Title cannot be empty. Please enter a valid title.\n");
+                continue;
             }
-            else
-            {
-                break;
-            }
+            break;
         }
     }
 
@@ -46,8 +47,6 @@ int main()
 
     printf("Press Enter to exit...");
     getchar();
-    getchar();
-
     return 0;
 }
 
