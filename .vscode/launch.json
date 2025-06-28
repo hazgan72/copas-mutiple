@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "${workspaceFolder}/copas-mutiple", 
-      "program": "${workspaceFolder}/build/Debug/outDebug", 
+      "cwd": "d:/Devs/Projects/Personal Project/Others/copas-mutiple",
+      "program": "d:/Devs/Projects/Personal Project/Others/copas-mutiple/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

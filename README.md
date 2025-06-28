@@ -111,7 +111,7 @@ To run Copas Multiple from the command line, follow these steps:
 
   for linux/macOs:
   ```bash
-  sudo mv copasMultiple /usr/local/bin/copasMultiple
+  sudo cp dist/copasMutiple /usr/local/bin/copasMutiple
   ```
   for windows:
 
