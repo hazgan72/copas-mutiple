@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "./src/headers/fileUtils.h"
 #include "./src/headers/choiceUtils.h"
 
