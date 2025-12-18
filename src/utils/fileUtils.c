@@ -25,7 +25,11 @@ const char *getFileExtension(const char *filename)
 void createDirectoryRecursively(const char *path)
 {
     char temp[512];
-    snprintf(temp, sizeof(temp), "%s", path);
+    if (snprintf(temp, sizeof(temp), "%s", path) >= sizeof(temp))
+    {
+        fprintf(stderr, "Path too long\n");
+        return;
+    }
     for (char *p = temp + 1; *p; p++)
     {
         if (*p == '/' || *p == '\\')
@@ -49,8 +53,13 @@ void createDirectoryRecursively(const char *path)
 void clearOutputDirectory(const char *outputDir, const char *title)
 {
     char folderPath[512];
-    snprintf(folderPath, sizeof(folderPath), "%s%c%s",
-             outputDir, DIRECTORY_SEPARATOR, title);
+
+    if (snprintf(folderPath, sizeof(folderPath), "%s%c%s",
+                 outputDir, DIRECTORY_SEPARATOR, title) >= sizeof(folderPath))
+    {
+        fprintf(stderr, "Path too long\n");
+        return;
+    }
 
     DIR *dir = opendir(folderPath);
     if (dir != NULL)
@@ -63,8 +72,11 @@ void clearOutputDirectory(const char *outputDir, const char *title)
                 continue;
 
             char filePath[512];
-            snprintf(filePath, sizeof(filePath), "%s%c%s",
-                     folderPath, DIRECTORY_SEPARATOR, entry->d_name);
+            if (snprintf(filePath, sizeof(filePath), "%s%c%s",
+                         folderPath, DIRECTORY_SEPARATOR, entry->d_name) >= sizeof(filePath))
+            {
+                continue;
+            }
 
             struct stat st;
             if (stat(filePath, &st) == 0 && S_ISREG(st.st_mode))
@@ -108,7 +120,7 @@ void copyFile(const char *source, const char *destination)
     fclose(dest);
 }
 
-void getFiles(char files[MAX_FILES][255], int *fileCount)
+void getFiles(char files[MAX_FILES][MAX_FILENAME], int *fileCount)
 {
     DIR *dir;
     struct dirent *entry;
@@ -146,12 +158,6 @@ void getFiles(char files[MAX_FILES][255], int *fileCount)
         if (!S_ISREG(st.st_mode))
             continue;
 
-#ifndef _WIN32
-        /* skip Linux/macOS executable files */
-        if (st.st_mode & S_IXUSR)
-            continue;
-#endif
-
         /* filter unwanted files */
         if (strcmp(entry->d_name, "main.c") == 0 ||
             strcmp(entry->d_name, "Makefile") == 0 ||
@@ -160,29 +166,46 @@ void getFiles(char files[MAX_FILES][255], int *fileCount)
             strstr(entry->d_name, ".c") ||
             strstr(entry->d_name, ".h") ||
             strstr(entry->d_name, ".md") ||
+            !strrchr(entry->d_name, '.') ||
             entry->d_name[0] == '.')
             continue;
 
-        strcpy(files[*fileCount], entry->d_name);
+        strncpy(
+            files[*fileCount],
+            entry->d_name,
+            MAX_FILENAME - 1);
+        files[*fileCount][MAX_FILENAME - 1] = '\0';
+
         (*fileCount)++;
     }
 
     closedir(dir);
 }
 
-void copyAllFiles(char files[][255], int fileCount, const char *title, int sequenceEpisode, int isEpisode, int isAddEnding)
+void copyAllFiles(char files[][MAX_FILENAME],
+                  int fileCount,
+                  const char *title,
+                  int sequenceEpisode,
+                  int isEpisode,
+                  int isAddEnding)
 {
     char destination[512];
     for (int i = 0; i < fileCount; i++)
     {
         const char *extension = getFileExtension(files[i]);
 
-        snprintf(destination, sizeof(destination), "output%c%s%c%s%s %d%s%s",
-                 DIRECTORY_SEPARATOR, title, DIRECTORY_SEPARATOR, title,
-                 isEpisode ? " Episode" : "",
-                 sequenceEpisode + i,
-                 (i == fileCount - 1 && isAddEnding) ? " End" : "",
-                 extension);
+        if (snprintf(destination, sizeof(destination),
+                     "output%c%s%c%s%s %d%s%s",
+                     DIRECTORY_SEPARATOR, title,
+                     DIRECTORY_SEPARATOR, title,
+                     isEpisode ? " Episode" : "",
+                     sequenceEpisode + i,
+                     (i == fileCount - 1 && isAddEnding) ? " End" : "",
+                     extension) >= sizeof(destination))
+        {
+            fprintf(stderr, "Destination path too long\n");
+            continue;
+        }
 
         copyFile(files[i], destination);
         printf("Copied: %s to %s\n", files[i], destination);

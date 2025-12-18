@@ -2,9 +2,10 @@
 #include <ctype.h>
 #include "../headers/choiceUtils.h"
 
-void choiceYesOrNo(char title[255], int *isBool)
+void choiceYesOrNo(const char *title, int *isBool)
 {
     char choice[10];
+
     while (1)
     {
         printf("%s", title);
@@ -13,7 +14,7 @@ void choiceYesOrNo(char title[255], int *isBool)
         while (getchar() != '\n')
             ;
 
-        char charFirst = tolower(choice[0]);
+        char charFirst = tolower((unsigned char)choice[0]);
 
         if (charFirst == 'y')
         {
@@ -32,7 +33,7 @@ void choiceYesOrNo(char title[255], int *isBool)
     }
 }
 
-void choiceNumber(char title[255], int *number)
+void choiceNumber(const char *title, int *number)
 {
     while (1)
     {
@@ -45,8 +46,9 @@ void choiceNumber(char title[255], int *number)
             while (getchar() != '\n')
                 ;
         }
-
-        if (*number >= 0)
+        else if (*number >= 0)
+        {
             break;
+        }
     }
 }
