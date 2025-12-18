@@ -1,4 +1,4 @@
 *.exe
-!test/*.exe
 /dist
 .vscode
+/test/output/

@@ -1,14 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <ctype.h>
 #include "./src/headers/fileUtils.h"
 #include "./src/headers/choiceUtils.h"
-
-#define MAX_FILES 255
-
-void getFiles(char files[MAX_FILES][255], int *fileCount);
 
 int main()
 {
@@ -48,37 +40,4 @@ int main()
     printf("Press Enter to exit...");
     getchar();
     return 0;
-}
-
-void getFiles(char files[MAX_FILES][255], int *fileCount)
-{
-    DIR *dir;
-    struct dirent *entry;
-    char *dirPath = ".";
-
-    if ((dir = opendir(dirPath)) == NULL)
-    {
-        perror("Failed to open directory");
-        exit(EXIT_FAILURE);
-    }
-
-    while ((entry = readdir(dir)) != NULL)
-    {
-        if (entry->d_type == DT_REG)
-        {
-            if (strcmp(entry->d_name, "main.c") != 0 &&
-                strcmp(entry->d_name, "Makefile") != 0 &&
-                !strstr(entry->d_name, ".o") &&
-                !strstr(entry->d_name, ".exe") &&
-                !strstr(entry->d_name, ".c") &&
-                !strstr(entry->d_name, ".h") &&
-                !strstr(entry->d_name, ".md") &&
-                entry->d_name[0] != '.')
-            {
-                strcpy(files[*fileCount], entry->d_name);
-                (*fileCount)++;
-            }
-        }
-    }
-    closedir(dir);
 }

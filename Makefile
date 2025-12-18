@@ -15,16 +15,16 @@ endif
 
 .PHONY: all clean create_dir
 
-all: create_dir copasMutiple copasMutipleForTest
+all: create_dir copasm copasmTest
 
 create_dir:
 	$(MKDIR)
 
-copasMutiple: $(OBJ)
-	$(CC) -o dist/copasMutiple$(EXE) $^
+copasm: $(OBJ)
+	$(CC) -o dist/copasm$(EXE) $^
 
-copasMutipleForTest: $(OBJ)
-	$(CC) -o test/copasMutipleTest$(EXE) $^
+copasmTest: $(OBJ)
+	$(CC) -o test/copasmTest$(EXE) $^
 
 dist/main.o: main.c $(DEPS)
 	$(CC) -c -o $@ main.c $(CFLAGS)

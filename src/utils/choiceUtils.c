@@ -10,6 +10,9 @@ void choiceYesOrNo(char title[255], int *isBool)
         printf("%s", title);
         scanf("%9s", choice);
 
+        while (getchar() != '\n')
+            ;
+
         char charFirst = tolower(choice[0]);
 
         if (charFirst == 'y')
@@ -42,9 +45,8 @@ void choiceNumber(char title[255], int *number)
             while (getchar() != '\n')
                 ;
         }
-        else
-        {
+
+        if (*number >= 0)
             break;
-        }
     }
 }

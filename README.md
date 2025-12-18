@@ -35,7 +35,7 @@ git clone <repository_url>
 ```
 2. Navigate to the Project Directory:
 ```bash
-cd copasMutiple
+cd copas-mutiple
 ```
 
 ## 🔨 Build the App
@@ -53,7 +53,7 @@ Once built, you can run Copas Multiple in two ways:
 Command Line Execution:
 - In the terminal, type:
   ```bash
-  ./copasMutiple
+  ./copasm
   ```
 
 This will launch the app in the current directory, allowing you to rename all files sequentially.
@@ -111,7 +111,7 @@ To run Copas Multiple from the command line, follow these steps:
 
   for linux/macOs:
   ```bash
-  sudo cp dist/copasMutiple /usr/local/bin/copasMutiple
+  sudo cp dist/copasm /usr/local/bin/copasm
   ```
   for windows:
 
@@ -121,7 +121,7 @@ To run Copas Multiple from the command line, follow these steps:
 
   Now you can run the app anywhere without having to copy the app into the folder containing the files you want to copy and rename, by using the command:
   ```bash
-  copasMutiple
+  copasm
   ```
 
 ## 📬 Support

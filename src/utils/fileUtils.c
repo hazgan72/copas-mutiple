@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -12,6 +11,7 @@
 #include <direct.h>
 #define DIRECTORY_SEPARATOR '\\'
 #else
+#include <unistd.h>
 #include <errno.h>
 #define DIRECTORY_SEPARATOR '/'
 #endif
@@ -49,7 +49,8 @@ void createDirectoryRecursively(const char *path)
 void clearOutputDirectory(const char *outputDir, const char *title)
 {
     char folderPath[512];
-    snprintf(folderPath, sizeof(folderPath), "%s%c%s", outputDir, DIRECTORY_SEPARATOR, title);
+    snprintf(folderPath, sizeof(folderPath), "%s%c%s",
+             outputDir, DIRECTORY_SEPARATOR, title);
 
     DIR *dir = opendir(folderPath);
     if (dir != NULL)
@@ -57,10 +58,17 @@ void clearOutputDirectory(const char *outputDir, const char *title)
         struct dirent *entry;
         while ((entry = readdir(dir)) != NULL)
         {
-            if (entry->d_type == DT_REG)
+            if (strcmp(entry->d_name, ".") == 0 ||
+                strcmp(entry->d_name, "..") == 0)
+                continue;
+
+            char filePath[512];
+            snprintf(filePath, sizeof(filePath), "%s%c%s",
+                     folderPath, DIRECTORY_SEPARATOR, entry->d_name);
+
+            struct stat st;
+            if (stat(filePath, &st) == 0 && S_ISREG(st.st_mode))
             {
-                char filePath[512];
-                snprintf(filePath, sizeof(filePath), "%s%c%s", folderPath, DIRECTORY_SEPARATOR, entry->d_name);
                 remove(filePath);
             }
         }
@@ -98,6 +106,68 @@ void copyFile(const char *source, const char *destination)
 
     fclose(src);
     fclose(dest);
+}
+
+void getFiles(char files[MAX_FILES][255], int *fileCount)
+{
+    DIR *dir;
+    struct dirent *entry;
+    const char *dirPath = ".";
+
+    if ((dir = opendir(dirPath)) == NULL)
+    {
+        perror("Failed to open directory");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entry = readdir(dir)) != NULL)
+    {
+        /* skip . and .. */
+        if (strcmp(entry->d_name, ".") == 0 ||
+            strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        /* prevent overflow */
+        if (*fileCount >= MAX_FILES)
+            break;
+
+        char filePath[512];
+#ifdef _WIN32
+        snprintf(filePath, sizeof(filePath), "%s\\%s", dirPath, entry->d_name);
+#else
+        snprintf(filePath, sizeof(filePath), "%s/%s", dirPath, entry->d_name);
+#endif
+
+        struct stat st;
+        if (stat(filePath, &st) != 0)
+            continue;
+
+        /* only regular files */
+        if (!S_ISREG(st.st_mode))
+            continue;
+
+#ifndef _WIN32
+        /* skip Linux/macOS executable files */
+        if (st.st_mode & S_IXUSR)
+            continue;
+#endif
+
+        /* filter unwanted files */
+        if (strcmp(entry->d_name, "main.c") == 0 ||
+            strcmp(entry->d_name, "Makefile") == 0 ||
+            strstr(entry->d_name, ".o") ||
+            strstr(entry->d_name, ".exe") ||
+            strstr(entry->d_name, ".c") ||
+            strstr(entry->d_name, ".h") ||
+            strstr(entry->d_name, ".md") ||
+            entry->d_name[0] == '.')
+            continue;
+
+        strcpy(files[*fileCount], entry->d_name);
+        (*fileCount)++;
+    }
+
+    closedir(dir);
 }
 
 void copyAllFiles(char files[][255], int fileCount, const char *title, int sequenceEpisode, int isEpisode, int isAddEnding)
