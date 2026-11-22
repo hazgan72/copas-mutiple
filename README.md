@@ -102,7 +102,7 @@ make clean
 ```
 
 ## Example  🎞️
-![img](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWVpcm94MXV0aHg3NmFuM3FmZzcwY2JweTd5bTZuNWN3OHFicTZibSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ertODta6JFjOnP7QHj/giphy-downsized-large.gif)
+![img](./src/assets/example.gif)
 
 ## Adding CLI 💻
 To run Copas Multiple from the command line, follow these steps:
